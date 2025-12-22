@@ -17,7 +17,7 @@ sudo -u student mkdir -p /home/student/lab2_files
 sudo -u student touch /home/student/lab2_files/file_{1..5}
 ```
 
-User 'student' should generally be used to complete tasks. Use 'sudo', as needed.
+User 'student'. Create all directories in /home/student.
 Task validation assumes the working directory is /home/student.
 Use `~/` as `/home/student`.
 
