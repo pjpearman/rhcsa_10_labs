@@ -21,14 +21,14 @@ check() {
 # Task 1: Text & Archive
 ########################
 
-check "1.1 /root/pass_max.txt exists and contains 'PASS_MAX_DAYS'" \
-  bash -c '[ -s /root/pass_max.txt ] && grep -q "PASS_MAX_DAYS" /root/pass_max.txt'
+check "1.1 /home/student/pass_max.txt exists and contains 'PASS_MAX_DAYS'" \
+  bash -c '[ -s /home/student/pass_max.txt ] && grep -q "PASS_MAX_DAYS" /home/student/pass_max.txt'
 
-check "1.2 /root/archives/logs_bkp.tar.bz2 is a valid bzip2 tar of /var/log" \
+check "1.2 /home/student/archives/logs_bkp.tar.bz2 is a valid bzip2 tar of /var/log" \
   bash -c '
-    [ -f /root/archives/logs_bkp.tar.bz2 ] || exit 1
-    file -b --mime-type /root/archives/logs_bkp.tar.bz2 | grep -q bzip2 || exit 1
-    tar -tjf /root/archives/logs_bkp.tar.bz2 >/dev/null 2>&1
+    [ -f /home/student/archives/logs_bkp.tar.bz2 ] || exit 1
+    file -b --mime-type /home/student/archives/logs_bkp.tar.bz2 | grep -q bzip2 || exit 1
+    tar -tjf /home/student/archives/logs_bkp.tar.bz2 >/dev/null 2>&1
   '
 
 #################################
@@ -73,14 +73,14 @@ check "3.3 /home/student/ownedfiles has at least one file owned by user student"
     find /home/student/ownedfiles -type f -user student | grep -q .
   '
 
-check "3.4 /root/ssh_config-paths.txt has valid absolute paths to ssh_config files" \
+check "3.4 /home/student/ssh_config-paths.txt has valid absolute paths to ssh_config files" \
   bash -c '
-    [ -s /root/ssh_config-paths.txt ] || exit 1
+    [ -s /home/student/ssh_config-paths.txt ] || exit 1
     while IFS= read -r p; do
       [ -n "$p" ] || exit 1
       [[ "$p" = /*ssh_config ]] || exit 1
       [ -f "$p" ] || exit 1
-    done < /root/ssh_config-paths.txt
+    done < /home/student/ssh_config-paths.txt
   '
 
 ###########################################

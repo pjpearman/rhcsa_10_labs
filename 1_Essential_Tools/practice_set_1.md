@@ -16,14 +16,14 @@ sudo chmod 0440 /etc/sudoers.d/student
 sudo -u student touch /home/student/task3_1 /home/student/task3_2 /home/student/task3_3 /home/student/task3_4 /home/student/task3_5
 ```
 
-User 'student' should generally be used to log in and switch to root.
-Task validation assumes the working directory is /root.
+User 'student'. Create all directories in /home/student.
+Task validation assumes the working directory is /home/student.
 
 ## Task 1: Text Search & Archive – Man Pages
 
 1.1 Find the string "Port" in /etc/ssh/sshd_config and output to ~/ssh.txt
 
-1.2 Create a gzip-compressed tar archive of /etc named etc_archive.tar.gz in /root directory
+1.2 Create a gzip-compressed tar archive of /etc named etc_archive.tar.gz in ~/
 
 - reference 'man grep' or 'grep --help'
 
@@ -45,7 +45,7 @@ Task validation assumes the working directory is /root.
 
 3.1 Find files in /usr that are greater than 3MB but less than 10MB, copy them to ~/largefiles directory
 
-3.2 Find files in /etc modified more than 120 days ago and copy them to /var/tmp/oldfiles/
+3.2 Find files in /etc modified more than 120 days ago and copy them to ~/oldfiles/
 
 - Use `cp -p` or `cp --preserve=timestamps` so the copied files keep their original mtime (validation checks rely on this).
 
@@ -61,10 +61,10 @@ Task validation assumes the working directory is /root.
 
 4.1 From node1, SSH into node2 as user student and:
 
-- Copy the contents of /etc/fstab to /var/tmp
+- Copy the contents of /etc/fstab to ~/fstab
 - Set the file ownership to root
 - Ensure no execute permissions for anyone
 
 ## Validate
 
-Run validate_set_1.sh as root from /root on node1.
+Run validate_set_1.sh as root from /home/student on node1.

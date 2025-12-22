@@ -17,13 +17,13 @@ sudo -u student mkdir -p /home/student/lab2_files
 sudo -u student touch /home/student/lab2_files/file_{1..5}
 ```
 
-User 'student' should generally be used to log in and switch to root.
-Task validation assumes the working directory is /root.
-Use `~/` for the current user (student: `/home/student`, root: `/root`).
+User 'student' should generally be used to complete tasks. Use 'sudo', as needed.
+Task validation assumes the working directory is /home/student.
+Use `~/` as `/home/student`.
 
 ## Task 1: Text Search & Archive – Man Pages
 
-1.1 Find the string "PASS_MAX_DAYS" in /etc/login.defs and output it (with line numbers) to /root/pass_max.txt
+1.1 Find the string "PASS_MAX_DAYS" in /etc/login.defs and output it (with line numbers) to ~/pass_max.txt
 
 1.2 Create a bzip2-compressed tar archive of /var/log named logs_bkp.tar.bz2 in ~/archives directory
 
@@ -53,7 +53,7 @@ Use `~/` for the current user (student: `/home/student`, root: `/root`).
 - Use `cp --preserve=timestamps` for 3.1 and 3.2
 - Use `cp --preserve=ownership` for 3.3
 
-3.4 Find files named ssh_config on the system and save the absolute paths to /root/ssh_config-paths.txt
+3.4 Find files named ssh_config on the system and save the absolute paths to ~/ssh_config-paths.txt
 
 ---
 
@@ -67,4 +67,4 @@ Use `~/` for the current user (student: `/home/student`, root: `/root`).
 
 ## Validate
 
-Run validate_set_2.sh as root from /root on node1.
+Run validate_set_2.sh as root from /home/student on node1.

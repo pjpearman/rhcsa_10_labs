@@ -6,7 +6,7 @@
 
 score=0
 max=11
-home_dir=$HOME
+home_dir=/home/student
 
 check() {
   local desc="$1"; shift
@@ -25,11 +25,11 @@ check() {
 check "1.1 ~/ssh.txt exists and contains 'Port'" \
   bash -c "[ -s \"$home_dir/ssh.txt\" ] && grep -q \"Port\" \"$home_dir/ssh.txt\""
 
-check "1.2 /root/etc_archive.tar.gz is a valid gzip tar of /etc" \
+check "1.2 /home/student/etc_archive.tar.gz is a valid gzip tar of /etc" \
   bash -c '
-    [ -f /root/etc_archive.tar.gz ] || exit 1
-    file -b --mime-type /root/etc_archive.tar.gz | grep -q gzip || exit 1
-    tar -tzf /root/etc_archive.tar.gz >/dev/null 2>&1
+    [ -f /home/student/etc_archive.tar.gz ] || exit 1
+    file -b --mime-type /home/student/etc_archive.tar.gz | grep -q gzip || exit 1
+    tar -tzf /home/student/etc_archive.tar.gz >/dev/null 2>&1
   '
 
 #################################
@@ -64,10 +64,10 @@ check "3.1 ~/largefiles has at least one file between 3MB and 10MB" \
     find "'"$home_dir"'/largefiles" -type f -size +3M -a -size -10M | grep -q .
   '
 
-check "3.2 /var/tmp/oldfiles contains files older than 120 days" \
+check "3.2 /home/student/oldfiles contains files older than 120 days" \
   bash -c '
-    [ -d /var/tmp/oldfiles ] || exit 1
-    find /var/tmp/oldfiles -type f -mtime +120 | grep -q .
+    [ -d /home/student/oldfiles ] || exit 1
+    find /home/student/oldfiles -type f -mtime +120 | grep -q .
   '
 
 check "3.3 ~/largefiles contains at least one file owned by user student" \
@@ -91,12 +91,12 @@ check "3.4 ~/sshd-paths.txt has valid absolute paths to sshd_config" \
 # Task 4: Remote copy result on node2
 ###########################################
 
-check "4.1 /var/tmp/fstab on node2 is root-owned and non-executable" \
+check "4.1 /home/student/fstab on node2 is root-owned and non-executable" \
   bash -c '
     ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no student@node2 \
-      "test -f /var/tmp/fstab && \
-       [ \"\$(stat -c \"%U:%G\" /var/tmp/fstab)\" = \"root:root\" ] && \
-       perms=\$(stat -c \"%A\" /var/tmp/fstab) && \
+      "test -f /home/student/fstab && \
+       [ \"\$(stat -c \"%U:%G\" /home/student/fstab)\" = \"root:root\" ] && \
+       perms=\$(stat -c \"%A\" /home/student/fstab) && \
        [[ \"\$perms\" != *x* ]]"'
 
 echo
