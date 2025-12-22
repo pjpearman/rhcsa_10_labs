@@ -5,7 +5,7 @@
 # Scoring: 1 point per check; prints per-check status and total score.
 
 score=0
-max=9
+max=10
 
 check() {
   local desc="$1"; shift
@@ -87,11 +87,12 @@ check "3.4 /home/student/ssh_config-paths.txt has valid absolute paths to ssh_co
 # Task 4: Remote copy result on node4
 ###########################################
 
-check "4.1 /home/student/hosts.remote is root-owned and has 640 permissions" \
+check "4.1 /home/student/hosts.remote on node2 is root-owned and has 640 permissions" \
   bash -c '
-    [ -f /home/student/hosts.remote ] || exit 1
-    [ "$(stat -c "%U:%G" /home/student/hosts.remote)" = "root:root" ] || exit 1
-    [ "$(stat -c "%a" /home/student/hosts.remote)" = "640" ]
+    ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no student@node2 \
+      "test -f /home/student/hosts.remote && \
+       [ \"\$(stat -c \"%U:%G\" /home/student/hosts.remote)\" = \"root:root\" ] && \
+       [ \"\$(stat -c \"%a\" /home/student/hosts.remote)\" = \"640\" ]"
   '
 
 echo

@@ -50,7 +50,7 @@ Use `~/` as `/home/student`.
 
 3.3 Find all files owned by user student under /home/student and copy them to ~/ownedfiles
 
-- Use `cp --preserve=timestamps` for 3.1 and 3.2
+- Use `cp --preserve=timestamps` for 3.2
 - Use `cp --preserve=ownership` for 3.3
 
 3.4 Find files named ssh_config on the system and save the absolute paths to ~/ssh_config-paths.txt
