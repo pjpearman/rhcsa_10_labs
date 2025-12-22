@@ -3,7 +3,8 @@
 prereqs:
 - Create user 'student'. Set student passwd to 'password' on node1 & node2.
 - Permission 'student' with sudo.
- 
+- Create some files that are owned by student.
+
 ```bash
 sudo useradd student
 echo 'student:password' | sudo chpasswd
@@ -11,9 +12,16 @@ echo 'student ALL=(ALL) ALL' | sudo tee /etc/sudoers.d/student >/dev/null
 sudo chmod 0440 /etc/sudoers.d/student
 ```
 
+```bash
+sudo -u student touch /home/student/task3_1 /home/student/task3_2 /home/student/task3_3 /home/student/task3_4 /home/student/task3_5
+```
+
+User 'student' should generally be used to log in and switch to root.
+Task validation assumes the working directory is /root.
+
 ## Task 1: Text Search & Archive – Man Pages
 
-1.1 Find the string "Port" in /etc/ssh/sshd_config and output to /root/ssh.txt
+1.1 Find the string "Port" in /etc/ssh/sshd_config and output to ~/ssh.txt
 
 1.2 Create a gzip-compressed tar archive of /etc named etc_archive.tar.gz in /root directory
 
@@ -23,7 +31,7 @@ sudo chmod 0440 /etc/sudoers.d/student
 
 ## Task 2: File Links – Shortcuts
 
-2.1 In /shorts directory:
+2.1 In ~/shorts directory:
 
 - Create a file file_a
 - echo 'This is file A' into file_a
@@ -35,13 +43,13 @@ sudo chmod 0440 /etc/sudoers.d/student
 
 ## Task 3: Advanced File Operations – Find
 
-3.1 Find files in /usr that are greater than 3MB but less than 10MB, copy them to /largefiles directory
+3.1 Find files in /usr that are greater than 3MB but less than 10MB, copy them to ~/largefiles directory
 
 3.2 Find files in /etc modified more than 120 days ago and copy them to /var/tmp/oldfiles/
 
-3.3 Find all files owned by user student and copy them to /largefiles
+3.3 Find all files owned by user student and copy them to ~/largefiles
 
-3.4 Find a file named sshd_config and save the absolute path to /root/sshd-paths.txt
+3.4 Find a file named sshd_config and save the absolute path to ~/sshd-paths.txt
 
 ---
 
@@ -52,3 +60,7 @@ sudo chmod 0440 /etc/sudoers.d/student
 - Copy the contents of /etc/fstab to /var/tmp
 - Set the file ownership to root
 - Ensure no execute permissions for anyone
+
+## Validate
+
+Run validate_set_1.sh as root from /root on node1.

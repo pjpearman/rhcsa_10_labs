@@ -6,6 +6,7 @@
 
 score=0
 max=10
+home_dir=$HOME
 
 check() {
   local desc="$1"; shift
@@ -21,8 +22,8 @@ check() {
 # Task 1: Text & Archive
 ########################
 
-check "1.1 /root/ssh.txt exists and contains 'Port'" \
-  bash -c '[ -s /root/ssh.txt ] && grep -q "Port" /root/ssh.txt'
+check "1.1 ~/ssh.txt exists and contains 'Port'" \
+  bash -c "[ -s \"$home_dir/ssh.txt\" ] && grep -q \"Port\" \"$home_dir/ssh.txt\""
 
 check "1.2 /root/etc_archive.tar.gz is a valid gzip tar of /etc" \
   bash -c '
@@ -35,32 +36,32 @@ check "1.2 /root/etc_archive.tar.gz is a valid gzip tar of /etc" \
 # Task 2: Links in /shorts
 #################################
 
-check "2.1 file_a exists in /shorts" \
-  test -f /shorts/file_a
+check "2.1 file_a exists in ~/shorts" \
+  test -f "$home_dir/shorts/file_a"
 
 check "2.1 file_a contains expected text" \
-  bash -c 'grep -qx "This is file A" /shorts/file_a'
+  bash -c "grep -qx \"This is file A\" \"$home_dir/shorts/file_a\""
 
 check "2.1 file_b is a symlink to file_a" \
   bash -c '
-    [ -L /shorts/file_b ] || exit 1
-    [ "$(readlink -f /shorts/file_b)" = "$(readlink -f /shorts/file_a)" ]
+    [ -L "'"$home_dir"'/shorts/file_b" ] || exit 1
+    [ "$(readlink -f "'"$home_dir"'/shorts/file_b")" = "$(readlink -f "'"$home_dir"'/shorts/file_a")" ]
   '
 
 check "2.1 file_c is a hard link to file_a (same inode)" \
   bash -c '
-    [ -f /shorts/file_c ] || exit 1
-    [ "$(stat -c "%i" /shorts/file_c)" = "$(stat -c "%i" /shorts/file_a)" ]
+    [ -f "'"$home_dir"'/shorts/file_c" ] || exit 1
+    [ "$(stat -c "%i" "'"$home_dir"'/shorts/file_c")" = "$(stat -c "%i" "'"$home_dir"'/shorts/file_a")" ]
   '
 
 ###############################################
 # Task 3: Advanced find/copy operations
 ###############################################
 
-check "3.1 /largefiles has at least one file between 3MB and 10MB" \
+check "3.1 ~/largefiles has at least one file between 3MB and 10MB" \
   bash -c '
-    [ -d /largefiles ] || exit 1
-    find /largefiles -type f -size +3M -a -size -10M | grep -q .
+    [ -d "'"$home_dir"'/largefiles" ] || exit 1
+    find "'"$home_dir"'/largefiles" -type f -size +3M -a -size -10M | grep -q .
   '
 
 check "3.2 /var/tmp/oldfiles contains files older than 120 days" \
@@ -69,21 +70,21 @@ check "3.2 /var/tmp/oldfiles contains files older than 120 days" \
     find /var/tmp/oldfiles -type f -mtime +120 | grep -q .
   '
 
-check "3.3 /largefiles contains at least one file owned by user student" \
+check "3.3 ~/largefiles contains at least one file owned by user student" \
   bash -c '
     id student &>/dev/null || exit 1
-    [ -d /largefiles ] || exit 1
-    find /largefiles -maxdepth 1 -type f -user student | grep -q .
+    [ -d "'"$home_dir"'/largefiles" ] || exit 1
+    find "'"$home_dir"'/largefiles" -maxdepth 1 -type f -user student | grep -q .
   '
 
-check "3.4 /root/sshd-paths.txt has valid absolute paths to sshd_config" \
+check "3.4 ~/sshd-paths.txt has valid absolute paths to sshd_config" \
   bash -c '
-    [ -s /root/sshd-paths.txt ] || exit 1
+    [ -s "'"$home_dir"'/sshd-paths.txt" ] || exit 1
     while IFS= read -r p; do
       [ -n "$p" ] || exit 1
       [[ "$p" = /*sshd_config ]] || exit 1
       [ -f "$p" ] || exit 1
-    done < /root/sshd-paths.txt
+    done < "'"$home_dir"'/sshd-paths.txt"
   '
 
 ###########################################
