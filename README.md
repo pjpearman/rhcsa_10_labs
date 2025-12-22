@@ -4,6 +4,8 @@ Prereqs:
 
 - Red Hat Enterprise Linux Server : node1
 - Red Hat Enterprise Linux Server : node2
+- If using the git repo, have git installed.
+  - git clone https://github.com/pjpearman/rhcsa_10_labs.git 
 - user 'student' created on node1 and node 1 with sudo.
 
 Create the student user
