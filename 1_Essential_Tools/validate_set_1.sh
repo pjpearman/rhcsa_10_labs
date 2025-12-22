@@ -5,7 +5,7 @@
 # Scoring: 1 point per check; prints per-check status and total score.
 
 score=0
-max=10
+max=11
 home_dir=$HOME
 
 check() {

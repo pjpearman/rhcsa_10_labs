@@ -47,7 +47,11 @@ Task validation assumes the working directory is /root.
 
 3.2 Find files in /etc modified more than 120 days ago and copy them to /var/tmp/oldfiles/
 
+- Use `cp -p` or `cp --preserve=timestamps` so the copied files keep their original mtime (validation checks rely on this).
+
 3.3 Find all files owned by user student and copy them to ~/largefiles
+
+- Use `cp -a` or `cp --preserve=ownership` so the copied files keep student ownership (validation checks rely on this).
 
 3.4 Find a file named sshd_config and save the absolute path to ~/sshd-paths.txt
 
