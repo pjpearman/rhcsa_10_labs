@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # RHCSA Essential Tools - Practice Set 2 Validator
-# Usage  : Run as root on the target system (for Task 4.1, run on node4).
+# Usage  : Run as root on the target system (for Task 4.1, run on node2).
 # Scoring: 1 point per check; prints per-check status and total score.
 
 score=0
@@ -21,79 +21,77 @@ check() {
 # Task 1: Text & Archive
 ########################
 
-check "1.1 /root/servername.txt exists and contains 'ServerName'" \
-  bash -c '[ -s /root/servername.txt ] && grep -q "ServerName" /root/servername.txt'
+check "1.1 /root/pass_max.txt exists and contains 'PASS_MAX_DAYS'" \
+  bash -c '[ -s /root/pass_max.txt ] && grep -q "PASS_MAX_DAYS" /root/pass_max.txt'
 
-check "1.2 /archives/logs_bkp.tar.bz2 is a valid bzip2 tar of /var/log" \
+check "1.2 /root/archives/logs_bkp.tar.bz2 is a valid bzip2 tar of /var/log" \
   bash -c '
-    [ -f /archives/logs_bkp.tar.bz2 ] || exit 1
-    file -b --mime-type /archives/logs_bkp.tar.bz2 | grep -q bzip2 || exit 1
-    tar -tjf /archives/logs_bkp.tar.bz2 >/dev/null 2>&1
+    [ -f /root/archives/logs_bkp.tar.bz2 ] || exit 1
+    file -b --mime-type /root/archives/logs_bkp.tar.bz2 | grep -q bzip2 || exit 1
+    tar -tjf /root/archives/logs_bkp.tar.bz2 >/dev/null 2>&1
   '
 
 #################################
 # Task 2: Links in /links
 #################################
 
-check "2.1 alpha.txt exists in /links" \
-  test -f /links/alpha.txt
+check "2.1 alpha.txt exists in /home/student/links2" \
+  test -f /home/student/links2/alpha.txt
 
 check "2.1 beta.txt is a symlink to alpha.txt" \
   bash -c '
-    [ -L /links/beta.txt ] || exit 1
-    [ "$(readlink -f /links/beta.txt)" = "$(readlink -f /links/alpha.txt)" ]
+    [ -L /home/student/links2/beta.txt ] || exit 1
+    [ "$(readlink -f /home/student/links2/beta.txt)" = "$(readlink -f /home/student/links2/alpha.txt)" ]
   '
 
 check "2.1 gamma.txt is a hard link to alpha.txt (same inode)" \
   bash -c '
-    [ -f /links/gamma.txt ] || exit 1
-    [ "$(stat -c "%i" /links/gamma.txt)" = "$(stat -c "%i" /links/alpha.txt)" ]
+    [ -f /home/student/links2/gamma.txt ] || exit 1
+    [ "$(stat -c "%i" /home/student/links2/gamma.txt)" = "$(stat -c "%i" /home/student/links2/alpha.txt)" ]
   '
 
 ###############################################
 # Task 3: Advanced find/copy operations
 ###############################################
 
-check "3.1 /binfiles has at least one file > 500KB" \
+check "3.1 /home/student/binpick has at least one file between 1MB and 5MB" \
   bash -c '
-    [ -d /binfiles ] || exit 1
-    find /binfiles -type f -size +500k | grep -q .
+    [ -d /home/student/binpick ] || exit 1
+    find /home/student/binpick -type f -size +1M -size -5M | grep -q .
   '
 
-check "3.2 /var/tmp/recent contains files modified in last 7 days" \
+check "3.2 /home/student/etc_recent contains files modified in last 30 days" \
   bash -c '
-    [ -d /var/tmp/recent ] || exit 1
-    find /var/tmp/recent -type f -mtime -7 | grep -q .
+    [ -d /home/student/etc_recent ] || exit 1
+    find /home/student/etc_recent -type f -mtime -30 | grep -q .
   '
 
-check "3.3 /operatorfiles has at least one file owned by user operator" \
+check "3.3 /home/student/ownedfiles has at least one file owned by user student" \
   bash -c '
-    id operator &>/dev/null || exit 1
-    [ -d /operatorfiles ] || exit 1
-    find /operatorfiles -type f -user operator | grep -q .
+    id student &>/dev/null || exit 1
+    [ -d /home/student/ownedfiles ] || exit 1
+    find /home/student/ownedfiles -type f -user student | grep -q .
   '
 
-check "3.4 /root/hosts-paths.txt has valid absolute paths to hosts files" \
+check "3.4 /root/ssh_config-paths.txt has valid absolute paths to ssh_config files" \
   bash -c '
-    [ -s /root/hosts-paths.txt ] || exit 1
+    [ -s /root/ssh_config-paths.txt ] || exit 1
     while IFS= read -r p; do
       [ -n "$p" ] || exit 1
-      [[ "$p" = /*hosts ]] || exit 1
+      [[ "$p" = /*ssh_config ]] || exit 1
       [ -f "$p" ] || exit 1
-    done < /root/hosts-paths.txt
+    done < /root/ssh_config-paths.txt
   '
 
 ###########################################
 # Task 4: Remote copy result on node4
 ###########################################
 
-check "4.1 /tmp/hosts is root-owned and not writable by group/others" \
+check "4.1 /home/student/hosts.remote is root-owned and has 640 permissions" \
   bash -c '
-    [ -f /tmp/hosts ] || exit 1
-    [ "$(stat -c "%U:%G" /tmp/hosts)" = "root:root" ] || exit 1
-    perms=$(stat -c "%A" /tmp/hosts)
-    # group write at index 5, others write at index 8 (0-based)
-    [ "${perms:5:1}" != "w" ] && [ "${perms:8:1}" != "w" ]
+    [ -f /home/student/hosts.remote ] || exit 1
+    [ "$(stat -c "%U:%G" /home/student/hosts.remote)" = "root:root" ] || exit 1
+    [ "$(stat -c "%a" /home/student/hosts.remote)" = "640" ]
   '
 
 echo
