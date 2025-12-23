@@ -1,6 +1,7 @@
 # RHCSA 10 Practical Exercises
 
 Hands-on RHCSA-style practice sets with validation scripts.
+Largely based on the tasks as performed by Haruna Adoga. https://youtube.com/playlist?list=PLiI_-JOspy6FuSPXSipE0xE4oC2XXYyuI&si=2WT_iQJdeyymMDie 
 
 ## Repo layout
 
