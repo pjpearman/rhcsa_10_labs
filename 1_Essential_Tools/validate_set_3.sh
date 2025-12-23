@@ -5,7 +5,7 @@
 # Scoring: 1 point per check; prints per-check status and total score.
 
 score=0
-max=9
+max=10
 home_dir=/home/student
 
 check() {
