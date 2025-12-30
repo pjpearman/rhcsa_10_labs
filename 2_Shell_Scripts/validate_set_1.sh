@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# validate_set1.sh
-# Checks: size_find output, insultme.sh outputs, users/groups exist and have passwords set.
+# validate_set_1.sh
+# Checks: size_find output, simple_conditional.sh outputs, users/groups exist and have passwords set.
 
 set -euo pipefail
 
@@ -35,18 +35,33 @@ else
 fi
 
 # --- Task 2 ---
-if [[ -x /root/insultme.sh ]]; then
-  out1=$(/root/insultme.sh me 2>/dev/null || true)
-  out2=$(/root/insultme.sh them 2>/dev/null || true)
-  out3=$(/root/insultme.sh 2>/dev/null || true)
+if [[ -x /root/simple_conditional.sh ]]; then
+  out_date=$(/root/simple_conditional.sh date 2>/dev/null || true)
+  out_shell=$(/root/simple_conditional.sh shell 2>/dev/null || true)
+  out_bad=$(/root/simple_conditional.sh nope 2>/dev/null || true)
+  out_none=$(/root/simple_conditional.sh 2>/dev/null || true)
 
-  [[ "$out1" == "Maybe this job isn't for you." ]] && ok1=1 || ok1=0
-  [[ "$out2" == "Without you, they are nothing." ]] && ok2=1 || ok2=0
-  [[ "$out3" == "Usage: ./insultme.sh me|them" ]] && ok3=1 || ok3=0
+  prefix_date="The system date is: "
+  if [[ "$out_date" == "$prefix_date"* ]]; then
+    got_date="${out_date#"$prefix_date"}"
+    d0="$(date)"
+    d1="$(date -d '1 second ago')"
+    d2="$(date -d '1 second')"
+    [[ "$got_date" == "$d0" || "$got_date" == "$d1" || "$got_date" == "$d2" ]] && ok1=1 || ok1=0
+  else
+    ok1=0
+  fi
 
-  if (( ok1 && ok2 && ok3 )); then pass "Task2"; score=$((score+3)); else fail "Task2 (outputs wrong)"; fi
+  prefix_shell="The user's shell is: "
+  expected_shell="$(getent passwd "$(id -un)" | cut -d: -f7)"
+  [[ "$out_shell" == "${prefix_shell}${expected_shell}" ]] && ok2=1 || ok2=0
+
+  [[ "$out_bad" == "Usage: ./simple_conditional date|shell" ]] && ok3=1 || ok3=0
+  [[ "$out_none" == "Usage: ./simple_conditional date|shell" ]] && ok4=1 || ok4=0
+
+  if (( ok1 && ok2 && ok3 && ok4 )); then pass "Task2"; score=$((score+3)); else fail "Task2 (outputs wrong)"; fi
 else
-  fail "Task2 (/root/insultme.sh missing or not executable)"
+  fail "Task2 (/root/simple_conditional.sh missing or not executable)"
 fi
 
 # --- Task 3 ---
