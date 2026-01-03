@@ -22,14 +22,13 @@ Use `~/` as `/root`.
 
 2.1 Create `/root/insultme3.sh` that supports:
 
-- `./insultme3.sh --who me|them|we` (required)
-- Optional `--upper` to uppercase the output
+- `./return_info.sh selinux|auditd ` (required)
+- Option `--upper` to uppercase the output
 - Invalid flags or values print a usage line to stderr and exit 2
 
 Expected output lines:
-- `me` prints: `Maybe this job isn't for you.`
-- `them` prints: `Without you, they are nothing.`
-- `we` prints: `We automate the boring stuff.`
+- `selinux` prints: `Selinux mode is: `<return the value of the getenforce command>`
+- `auditd` prints: `Security Audting Logging Service state is: <Return only line 2 and 3>`
 
 ---
 
