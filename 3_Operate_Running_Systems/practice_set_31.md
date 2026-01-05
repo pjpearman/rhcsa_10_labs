@@ -11,9 +11,9 @@ Use `~/` as `/root`.
 
 ## Task 1: Reset Root
 
-1.1 On node2, reset the root password to `RootReset31` using the GRUB `init=/bin/bash` method.
+1.1 On node2, run 'openssl rand -base64 15 | passwd --stdin root'.
 
-1.2 Ensure SELinux relabels on next boot (`touch /.autorelabel`).
+1.2 Reboot node2 and recover the root password. 
 
 1.3 Reboot node2 and confirm root login works with the new password.
 
@@ -27,25 +27,23 @@ Validation for Task 1 is not automated.
 
 2.2 Set SELinux to permissive and make the change persistent across reboots.
 
-2.3 Enable and start `chronyd` so it starts at boot.
+2.3 Enable and start `cockpit` so it starts at boot. NOTE: Firewall changes are not required for this task, but cockpit will not be remotely accessible. Firewall tasks are covered later. 
 
 ---
 
 ## Task 3: Persistent Journaling
 
-3.1 Configure journald for persistent storage by creating `/var/log/journal` and setting `Storage=persistent`.
+3.1 Configure journald for persistent storage.
 
-3.2 Restart `systemd-journald`.
-
-3.3 Save the last 20 lines of the current boot journal to `/root/journal31.txt`.
+3.2 Save the last 20 lines of the current boot journal to `/root/journal31.txt`.
 
 ---
 
 ## Task 4: Process Management
 
-4.1 Start `sleep 1000` in the background and save its PID to `/root/sleep31.pid`.
+4.1 Start `sleep 1000` in the background.
 
-4.2 Use `renice` to change the process niceness to `10`.
+4.2 Use `renice` to change the process niceness to `10`. Save sleep's pid to /root/sleep31.pid
 
 4.3 Terminate the process and confirm it is no longer running.
 
@@ -53,11 +51,11 @@ Validation for Task 1 is not automated.
 
 ## Task 5: Work with File Permissions and ACLs
 
-5.1 Create `/root/perm31` with files `owned31.txt` and `script31.sh`.
+5.1 Create directory `/root/perm31` with files `owned31.txt` and `script31.sh`.
 
 5.2 Change ownership of `owned31.txt` to `student:student`.
 
-5.3 Set `script31.sh` permissions to `700` (owner read/write/execute only).
+5.3 Set `script31.sh` permissions to 750.
 
 5.4 Use ACLs to grant user `student` read and execute access to `script31.sh`.
 
@@ -67,11 +65,7 @@ Validation for Task 1 is not automated.
 
 ## Task 6: Secure File Transfer
 
-6.1 As user `student` on node1, use `scp` to copy `/etc/hosts` to `student@node2:/home/student/hosts.node1`.
-
-6.2 From node2 as user `student`, copy that file back to node1 as `/home/student/hosts.node2`.
-
-6.3 On node1, move `/home/student/hosts.node2` to `/root/hosts.node2`.
+6.1 As user `student` on node1, use secure copy `/etc/hosts` to student's home directoy on node2 with filename `hosts.node1`.
 
 ## Validate
 
