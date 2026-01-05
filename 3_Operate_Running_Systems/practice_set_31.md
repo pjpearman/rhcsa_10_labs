@@ -17,6 +17,8 @@ Use `~/` as `/root`.
 
 1.3 Reboot node2 and confirm root login works with the new password.
 
+Validation for Task 1 is not automated.
+
 ---
 
 ## Task 2: Using Tuned and SELinux Familiarity
@@ -43,9 +45,9 @@ Use `~/` as `/root`.
 
 4.1 Start `sleep 1000` in the background and save its PID to `/root/sleep31.pid`.
 
-4.2 Change the process niceness to `10`. (recommend using 'top')
+4.2 Use `renice` to change the process niceness to `10`.
 
-4.3 Terminate the process and confirm it is no longer running. (recommend using 'top')
+4.3 Terminate the process and confirm it is no longer running.
 
 ---
 
@@ -67,7 +69,9 @@ Use `~/` as `/root`.
 
 6.1 As user `student` on node1, use `scp` to copy `/etc/hosts` to `student@node2:/home/student/hosts.node1`.
 
-6.2 From node2, copy that file back to node1 as `/root/hosts.node2`.
+6.2 From node2 as user `student`, copy that file back to node1 as `/home/student/hosts.node2`.
+
+6.3 On node1, move `/home/student/hosts.node2` to `/root/hosts.node2`.
 
 ## Validate
 
