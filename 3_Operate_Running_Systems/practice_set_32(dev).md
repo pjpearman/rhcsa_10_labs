@@ -1,12 +1,11 @@
 # RHCSA Practice Set #32 - Operate Running Systems (Intermediate)
 
 prereqs:
-- Work on node1 as user `student` (use `sudo` when needed).
-- Use `/home/student` for files created in this set.
+- Work on node1 as root
+- Validation assumes files are created in `/root` unless noted.
 - Ensure console access to node2 for the root password reset task.
 
-Task validation assumes the working directory is /home/student.
-Use `~/` as `/home/student`.
+Task validation assumes the working directory is /root
 
 ## Task 1: Reset Root
 
@@ -31,13 +30,11 @@ Use `~/` as `/home/student`.
 ## Task 3: Persistent Journaling
 
 3.1 Create `/etc/systemd/journald.conf.d/99-persistent.conf` with:
-
+- `[Journal]`
 - `Storage=persistent`
 - `SystemMaxUse=150M`
 
-3.2 Restart `systemd-journald`.
-
-3.3 Reboot node1 and save `journalctl -b -1 -n 5` output to `~/journal32.prev`.
+3.2 Reboot node1 and save `journalctl -b -1 -n 5` output to `~/journal32.prev`.
 
 ---
 
@@ -57,9 +54,11 @@ Use `~/` as `/home/student`.
 
 5.1 Create `~/perm32` with files `report32.txt` and `run32.sh`.
 
-5.2 Change ownership of `report32.txt` to `root:root` and set permissions to `640`.
+5.2 Change ownership of `report32.txt` to `root:root` and set permissions to `644`.
 
 5.3 Set `run32.sh` permissions to `750`.
+
+Complete steps 5.2-5.3 before applying ACLs; changing permissions after ACLs can alter the ACL mask.
 
 5.4 Use ACLs to grant user `student` read access to `report32.txt`.
 
@@ -75,7 +74,7 @@ Use `~/` as `/home/student`.
 
 6.2 Use `scp -p -r` to copy `~/transfer32` to `student@node2:/home/student/transfer32`.
 
-6.3 On node2, rename `payload32.txt` to `payload32.node2`, then copy it back to `~/transfer32/payload32.node2` on node1.
+6.3 On node2, cp `payload32.txt` as `payload32.node2`, then copy it back to `/root/transfer32/payload32.node2` on node1.
 
 ## Validate
 
