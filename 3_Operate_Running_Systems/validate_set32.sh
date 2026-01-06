@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+# 
 # RHCSA Operate Running Systems - Practice Set 32 Validator
 # Usage  : Run as root on node1 from /home/student.
 # Scoring: 1 point per check; prints per-check status and total score.
