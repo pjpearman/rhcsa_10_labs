@@ -1,4 +1,4 @@
-# RHCSA Configure Local Storage - Practice Set 31
+# RHCSA 10 Configure Local Storage - Practice Set 31
 ## Usage  : Run as root on node1 from /root.
 ## Key Tasks: 
     - List, create, delete partitions on GPT disks

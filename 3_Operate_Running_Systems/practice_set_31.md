@@ -1,4 +1,4 @@
-# RHCSA Practice Set #31 - Operate Running Systems (Beginner)
+# RHCSA 10 Practice Set #31 - Operate Running Systems (Beginner)
 
 prereqs:
 - Work on node1 as root.
