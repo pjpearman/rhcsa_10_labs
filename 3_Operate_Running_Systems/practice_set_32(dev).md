@@ -12,7 +12,7 @@ Use `~/` as `/home/student`.
 
 1.1 On node2, lock the root account (`passwd -l root`).
 
-1.2 Recover by using GRUB `rd.break` to set the root password to `RootReset32`.
+1.2 Recover by setting the root password to `RootReset32`.
 
 1.3 Ensure SELinux relabels on next boot and confirm root login works.
 
@@ -24,7 +24,7 @@ Use `~/` as `/home/student`.
 
 2.2 Set SELinux to enforcing and make it persistent; save `getenforce` output to `~/selinux32.txt`.
 
-2.3 Enable and start `crond` so it starts at boot; save `systemctl is-enabled crond` output to `~/crond32.txt`.
+2.3 Install, enable and start `httpd` so it starts at boot; save `systemctl is-enabled httpd` output to `~/httpd.txt`.
 
 ---
 
@@ -43,11 +43,13 @@ Use `~/` as `/home/student`.
 
 ## Task 4: Process Management
 
-4.1 Start `yes > /dev/null` with `nice -n 15` and start `sleep 900` in the background.
+4.1 Start `yes > /dev/null` with `nice -n 15` in the background. (One liner)
+    Save the output of `ps -o ni= -p <YES PID>` to `/root/yes.nice`.
 
-4.2 Use `renice` to set the `sleep` process to niceness `-5`.
+4.2 Use `renice` to set the `yes` process to niceness `-5`.
+    Append the output of `ps -o ni= -p <YES PID>` to `/root/yes.nice`.
 
-4.3 Stop only the `yes` process with `SIGTERM` and confirm `sleep` is still running.
+4.3 Stop the `yes` process.
 
 ---
 
@@ -57,7 +59,7 @@ Use `~/` as `/home/student`.
 
 5.2 Change ownership of `report32.txt` to `root:root` and set permissions to `640`.
 
-5.3 Set `run32.sh` permissions to `750` (owner/group read/write/execute).
+5.3 Set `run32.sh` permissions to `750`.
 
 5.4 Use ACLs to grant user `student` read access to `report32.txt`.
 
