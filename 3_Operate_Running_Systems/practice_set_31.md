@@ -35,7 +35,8 @@ Validation for Task 1 is not automated.
 
 3.1 Configure journald for persistent storage.
 
-3.2 Save the last 20 lines of the current boot journal to `/root/journal31.txt`.
+3.2 Save any 20 journal lines from the current boot to `/root/journal31.txt`.
+    Hint: `journalctl -b -n 20 --no-pager > /root/journal31.txt`
 
 ---
 

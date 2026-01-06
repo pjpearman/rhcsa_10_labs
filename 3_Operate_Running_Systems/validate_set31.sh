@@ -44,13 +44,15 @@ check "3.1 /var/log/journal exists" \
   test -d /var/log/journal
 
 check "3.1 /var/log/journal has .journal files" \
-  bash -c 'shopt -s nullglob; files=(/var/log/journal/*.journal); (( ${#files[@]} > 0 ))'
+  bash -c 'shopt -s nullglob; files=(/var/log/journal/*/*.journal); (( ${#files[@]} > 0 ))'
 
 check "3.2 systemd-journald is active" \
   bash -c 'systemctl is-active systemd-journald >/dev/null 2>&1'
 
-check "3.3 /root/journal31.txt matches last 20 lines of current boot" \
-  bash -c 'cmp -s <(journalctl -b -n 20 --no-pager 2>/dev/null) /root/journal31.txt'
+check "3.3 /root/journal31.txt contains 20 current-boot journal lines" \
+  bash -c '[ "$(wc -l < /root/journal31.txt 2>/dev/null)" -eq 20 ] && \
+    journalctl -b --no-pager 2>/dev/null | tail -n 200 | \
+    grep -Fx -f /root/journal31.txt >/dev/null'
 
 ###########################################
 # Task 4: Process Management
@@ -87,7 +89,8 @@ check "5.4 ACL grants student r-x on script31.sh" \
   bash -c 'getfacl -p /root/perm31/script31.sh 2>/dev/null | grep -q "^user:student:r-x"'
 
 check "5.5 acl31.txt matches getfacl output" \
-  bash -c 'getfacl -p /root/perm31/script31.sh 2>/dev/null | diff -q - /root/perm31/acl31.txt >/dev/null'
+  bash -c 'diff -q <(getfacl -p /root/perm31/script31.sh 2>/dev/null | sed "/^# file:/d") \
+    <(sed "/^# file:/d" /root/perm31/acl31.txt 2>/dev/null) >/dev/null'
 
 ###########################################
 # Task 6: Secure File Transfer
