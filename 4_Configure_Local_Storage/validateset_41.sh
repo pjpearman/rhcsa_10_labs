@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# RHCSA Configure Local Storage - Practice Set 41 Validator (Tasks 1-4)
+# RHCSA Configure Local Storage - Practice Set 41 Validator (Tasks 1-5)
 # Usage  : Run as root on node1 from /root.
 # Scoring: 1 point per check; prints per-check status and total score.
 
@@ -11,7 +11,7 @@ DEV2="/dev/${DISK2}"
 printf '[WARN] Using devices %s and %s (override with DISK1/DISK2)\n' "$DEV1" "$DEV2"
 
 score=0
-max=29
+max=31
 
 check() {
   local desc="$1"; shift
@@ -152,5 +152,18 @@ check "4.2 swap persists in /etc/fstab" \
   bash -c "uuid=\$(blkid -o value -s UUID \"${DEV2}2\" 2>/dev/null); \
            grep -Eqs \"^[[:space:]]*(${DEV2}2|UUID=\${uuid})[[:space:]]+[^[:space:]]+[[:space:]]+swap([[:space:]]|$)\" /etc/fstab"
 
+###########################################
+# Task 5: Extend an Existing LV (Extents)
+###########################################
+
+check "5.1 lvxfs41 uses 80 extents" \
+  bash -c 'le=$(lvdisplay /dev/vg41/lvxfs41 2>/dev/null | awk "/Current LE/ {print \$3}" | head -n1); \
+           [ "$le" = "80" ]'
+
+check "5.1 lvxfs41 XFS size reflects the extension" \
+  bash -c 'blocks=$(xfs_info /dev/vg41/lvxfs41 2>/dev/null | \
+           sed -n "s/.*blocks=\\([0-9]\\+\\).*/\\1/p" | head -n1); \
+           [ -n "$blocks" ] && [ "$blocks" -ge 160000 ]'
+
 echo
-echo "Total score (Set 41, Tasks 1-4): $score / $max"
+echo "Total score (Set 41, Tasks 1-5): $score / $max"
