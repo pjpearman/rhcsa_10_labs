@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# RHCSA Configure Local Storage - Practice Set 41 Validator (Tasks 1-6)
+# RHCSA Configure Local Storage - Practice Set 41 Validator (Tasks 1-7)
 # Usage  : Run as root on node1 from /root.
 # Scoring: 1 point per check; prints per-check status and total score.
 
@@ -8,7 +8,7 @@ DISK1="${DISK1:-}"
 DISK2="${DISK2:-}"
 
 score=0
-max=36
+max=38
 
 check() {
   local desc="$1"; shift
@@ -86,6 +86,32 @@ mount_on_device() {
   [[ "$(readlink -f "$source")" = "$(readlink -f "$dev")" ]]
 }
 
+nfs_source_ok() {
+  local source="$1"
+  [[ "$source" == *":${NFS_EXPORT_PATH}" ]]
+}
+
+nfs_file_present() {
+  local export="$1"
+  local mount="$2"
+  local file="$3"
+  local source
+  local result=1
+
+  if findmnt -n "$mount" >/dev/null 2>&1; then
+    source=$(findmnt -n -o SOURCE --target "$mount" 2>/dev/null)
+    nfs_source_ok "$source" || return 1
+    [[ -f "$mount/$file" ]]
+    return
+  fi
+
+  [[ -d "$mount" ]] || return 1
+  mount -t nfs "$export" "$mount" >/dev/null 2>&1 || return 1
+  [[ -f "$mount/$file" ]] && result=0
+  umount "$mount" >/dev/null 2>&1
+  return "$result"
+}
+
 DEV1=""
 DEV2=""
 DEV1_SRC=""
@@ -133,6 +159,10 @@ DEV1P3=$(part_dev "$DEV1" 3)
 DEV2P1=$(part_dev "$DEV2" 1)
 DEV2P2=$(part_dev "$DEV2" 2)
 DEV2P3=$(part_dev "$DEV2" 3)
+NFS_EXPORT_PATH="/exports/rhcsa41"
+NFS_EXPORT="node2:${NFS_EXPORT_PATH}"
+NFS_MOUNT="/mnt/nfs41"
+NFS_FILE="nfs41.txt"
 
 printf '[WARN] Using devices %s (%s) and %s (%s) (override with DISK1/DISK2)\n' \
   "$DEV1" "$DEV1_SRC" "$DEV2" "$DEV2_SRC"
@@ -282,5 +312,15 @@ check "6.1 /mnt/xfs41 uses UUID in /etc/fstab" \
 check "6.1 swap uses UUID in /etc/fstab" \
   bash -c "grep -Eqs '^[[:space:]]*UUID=[^[:space:]]+[[:space:]]+(none|swap)[[:space:]]+swap([[:space:]]|$)' /etc/fstab"
 
+###########################################
+# Task 7: NFS Mount/Unmount
+###########################################
+
+check "7.1 ${NFS_MOUNT} is not mounted" \
+  bash -c "! mountpoint -q \"$NFS_MOUNT\""
+
+check "7.1 ${NFS_EXPORT} contains ${NFS_FILE}" \
+  nfs_file_present "$NFS_EXPORT" "$NFS_MOUNT" "$NFS_FILE"
+
 echo
-echo "Total score (Set 41, Tasks 1-6): $score / $max"
+echo "Total score (Set 41, Tasks 1-7): $score / $max"
